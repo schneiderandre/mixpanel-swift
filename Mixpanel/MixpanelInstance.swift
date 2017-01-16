@@ -386,19 +386,19 @@ open class MixpanelInstance: CustomDebugStringConvertible, FlushDelegate {
         if let ASIdentifierManagerClass = NSClassFromString("ASIdentifierManager") {
             let sharedManagerSelector = NSSelectorFromString("sharedManager")
             if let sharedManagerIMP = ASIdentifierManagerClass.method(for: sharedManagerSelector) {
-                typealias sharedManagerFunc = @convention(c) (AnyObject, Selector) -> AnyObject!
-                let curriedImplementation = unsafeBitCast(sharedManagerIMP, to: sharedManagerFunc.self)
+                typealias SharedManagerFunc = @convention(c) (AnyObject, Selector) -> AnyObject!
+                let curriedImplementation = unsafeBitCast(sharedManagerIMP, to: SharedManagerFunc.self)
                 if let sharedManager = curriedImplementation(ASIdentifierManagerClass.self, sharedManagerSelector) {
                     let advertisingTrackingEnabledSelector = NSSelectorFromString("isAdvertisingTrackingEnabled")
                     if let isTrackingEnabledIMP = sharedManager.method(for: advertisingTrackingEnabledSelector) {
-                        typealias isTrackingEnabledFunc = @convention(c) (AnyObject, Selector) -> Bool
-                        let curriedImplementation2 = unsafeBitCast(isTrackingEnabledIMP, to: isTrackingEnabledFunc.self)
+                        typealias IsTrackingEnabledFunc = @convention(c) (AnyObject, Selector) -> Bool
+                        let curriedImplementation2 = unsafeBitCast(isTrackingEnabledIMP, to: IsTrackingEnabledFunc.self)
                         let isTrackingEnabled = curriedImplementation2(self, advertisingTrackingEnabledSelector)
                         if isTrackingEnabled {
                             let advertisingIdentifierSelector = NSSelectorFromString("advertisingIdentifier")
                             if let advertisingIdentifierIMP = sharedManager.method(for: advertisingIdentifierSelector) {
-                                typealias adIdentifierFunc = @convention(c) (AnyObject, Selector) -> NSUUID
-                                let curriedImplementation3 = unsafeBitCast(advertisingIdentifierIMP, to: adIdentifierFunc.self)
+                                typealias AdIdentifierFunc = @convention(c) (AnyObject, Selector) -> NSUUID
+                                let curriedImplementation3 = unsafeBitCast(advertisingIdentifierIMP, to: AdIdentifierFunc.self)
                                 ifa = curriedImplementation3(self, advertisingIdentifierSelector).uuidString
                             }
                         }
